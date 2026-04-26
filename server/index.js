@@ -45,19 +45,22 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors({
+// CORS configuration
+const corsOptions = {
   origin(origin, callback) {
     if (!origin || trustedOrigins.has(origin) || process.env.NODE_ENV !== 'production') {
       callback(null, true);
       return;
     }
+    console.warn(`[CORS Blocked] Origin: ${origin}`);
     callback(new Error('CORS origin is not allowed.'));
   },
   methods: ['POST', 'GET', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
-}));
+};
 
 app.use(express.json({ limit: '10kb' }));
+app.use('/api', cors(corsOptions));
 app.use('/api', rateLimiter);
 app.use('/api', sanitizeInput);
 app.use('/api', chatRouter);
