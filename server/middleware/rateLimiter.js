@@ -7,7 +7,7 @@
  * @module middleware/rateLimiter
  */
 
-import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
+import rateLimit from 'express-rate-limit';
 
 /**
  * Rate limiter configured for 30 requests per minute per IP.
@@ -15,12 +15,12 @@ import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
  */
 export const rateLimiter = rateLimit({
   windowMs: 60 * 1000,    // 1-minute window
-  max: 30,                 // 30 requests per window
+  limit: 30,               // 30 requests per window (renamed from 'max' in newer versions but 'max' still works)
   standardHeaders: true,   // Return rate limit info in `RateLimit-*` headers
   legacyHeaders: false,    // Disable `X-RateLimit-*` headers
   message: {
     error: 'Too many requests. Please wait a moment before trying again.',
     retryAfter: 60,
   },
-  keyGenerator: (req) => ipKeyGenerator(req.ip),
+  keyGenerator: (req) => req.ip,
 });
