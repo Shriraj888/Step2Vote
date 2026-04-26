@@ -1,0 +1,118 @@
+/* Checklist Page Styles */
+
+.checklist {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.checklist__header { text-align: center; margin-bottom: 2rem; }
+.checklist__title { font-size: 1.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+.checklist__subtitle { color: var(--color-text-secondary); margin-top: 0.5rem; line-height: 1.6; }
+
+/* Progress */
+.checklist__progress {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-xl); padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.checklist__progress-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;
+}
+
+.checklist__progress-label { font-weight: 600; font-size: 0.95rem; }
+.checklist__progress-count { color: var(--color-primary); font-weight: 700; }
+
+.checklist__progress-bar {
+  height: 8px; background: rgba(255,255,255,0.06);
+  border-radius: var(--radius-full); overflow: hidden;
+}
+
+.checklist__progress-fill {
+  height: 100%; background: var(--gradient-primary);
+  border-radius: var(--radius-full); transition: width 0.5s ease;
+}
+
+.checklist__progress-footer {
+  display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;
+}
+
+.checklist__progress-percent { font-size: 0.85rem; color: var(--color-text-muted); }
+
+.checklist__reset-btn {
+  padding: 0.35rem 0.85rem; background: rgba(244,67,54,0.08);
+  border: 1px solid rgba(244,67,54,0.2); border-radius: var(--radius-md);
+  color: #ef5350; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+}
+
+.checklist__reset-btn:hover { background: rgba(244,67,54,0.15); }
+.checklist__reset-btn:focus-visible { outline: 2px solid #ef5350; outline-offset: 2px; }
+
+/* Completion */
+.checklist__complete {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 1rem 1.25rem; margin-bottom: 1.5rem;
+  background: rgba(76,175,80,0.08); border: 1px solid rgba(76,175,80,0.2);
+  border-radius: var(--radius-lg); animation: fadeSlideIn 0.3s ease-out;
+}
+
+.checklist__complete-icon { font-size: 1.5rem; }
+.checklist__complete-text { font-size: 0.95rem; color: #81c784; }
+
+/* Groups */
+.checklist__groups { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.checklist__group {
+  border: 1px solid rgba(255,255,255,0.06); border-radius: var(--radius-xl);
+  padding: 1.25rem; background: rgba(255,255,255,0.02);
+}
+
+.checklist__group-title {
+  font-size: 0.9rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--color-primary);
+  padding: 0 0.5rem; margin-bottom: 0.5rem;
+}
+
+.checklist__items { display: flex; flex-direction: column; gap: 0.5rem; }
+
+.checklist__item {
+  display: flex; align-items: flex-start; gap: 0.85rem;
+  padding: 0.85rem 1rem; border-radius: var(--radius-md);
+  cursor: pointer; transition: all 0.2s; border: 1px solid transparent;
+}
+
+.checklist__item:hover { background: rgba(255,255,255,0.03); }
+.checklist__item:focus-within { border-color: var(--color-primary); background: rgba(99,102,241,0.05); }
+
+.checklist__item--checked { opacity: 0.7; }
+.checklist__item--checked .checklist__item-label { text-decoration: line-through; }
+
+.checklist__checkbox {
+  position: absolute; opacity: 0; width: 0; height: 0;
+}
+
+.checklist__checkmark {
+  flex-shrink: 0; width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 700;
+  border: 2px solid rgba(255,255,255,0.15); color: #fff;
+  transition: all 0.2s;
+}
+
+.checklist__item--checked .checklist__checkmark {
+  background: var(--color-primary); border-color: var(--color-primary);
+}
+
+.checklist__item-content { display: flex; flex-direction: column; gap: 0.15rem; }
+.checklist__item-label { font-size: 0.95rem; font-weight: 500; }
+.checklist__item-desc { font-size: 0.8rem; color: var(--color-text-muted); line-height: 1.4; }
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .checklist { padding: 1.5rem 1rem 3rem; }
+}

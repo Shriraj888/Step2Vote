@@ -1,0 +1,212 @@
+/* Learn Page Styles */
+
+.learn {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.learn__header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.learn__title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.learn__subtitle {
+  color: var(--color-text-secondary);
+  margin-top: 0.5rem;
+  line-height: 1.6;
+}
+
+/* Timeline */
+.learn__timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.learn__step {
+  position: relative;
+  padding-left: 3.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.learn__connector {
+  position: absolute;
+  left: 22px;
+  top: 48px;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.learn__step--expanded .learn__connector {
+  background: var(--step-color);
+  opacity: 0.3;
+}
+
+.learn__step-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  text-align: left;
+  color: var(--color-text);
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+.learn__step-header:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.learn__step-header:focus-visible {
+  outline: 2px solid var(--step-color);
+  outline-offset: 2px;
+}
+
+.learn__step--expanded .learn__step-header {
+  border-color: var(--step-color);
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.learn__step-number {
+  position: absolute;
+  left: -3.5rem;
+  top: 0.85rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  background: var(--color-surface);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  z-index: 1;
+  transition: all 0.25s;
+}
+
+.learn__step--expanded .learn__step-number {
+  border-color: var(--step-color);
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.15);
+}
+
+.learn__step-info { flex: 1; }
+
+.learn__step-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.learn__step-count {
+  color: var(--step-color);
+  font-weight: 700;
+}
+
+.learn__step-desc {
+  font-size: 0.88rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.learn__step-arrow {
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.learn__step-arrow--open {
+  transform: rotate(180deg);
+  color: var(--step-color);
+}
+
+/* Step Details */
+.learn__step-details {
+  padding: 1.25rem 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: none;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 500px; }
+}
+
+.learn__detail-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.learn__detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.learn__detail-bullet {
+  color: var(--step-color);
+  font-size: 1.2rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* CTA */
+.learn__cta {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: var(--radius-xl);
+}
+
+.learn__cta-text {
+  color: var(--color-text-secondary);
+}
+
+.learn__cta-link {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.learn__cta-link:hover { text-decoration: underline; }
+.learn__cta-link:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; border-radius: 2px; }
+
+@media (max-width: 768px) {
+  .learn { padding: 1.5rem 1rem 3rem; }
+  .learn__step { padding-left: 3rem; }
+  .learn__step-number { left: -3rem; width: 38px; height: 38px; font-size: 1.1rem; }
+}

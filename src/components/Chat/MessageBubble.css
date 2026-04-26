@@ -1,0 +1,140 @@
+.message-bubble {
+  display: flex;
+  gap: 0.75rem;
+  max-width: 85%;
+  animation: fadeSlideIn 0.3s ease-out;
+}
+
+.message-bubble--user {
+  flex-direction: row-reverse;
+  align-self: flex-end;
+}
+
+.message-bubble--ai {
+  align-self: flex-start;
+}
+
+.message-bubble__avatar {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.message-bubble--user .message-bubble__avatar {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.message-bubble__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.message-bubble__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.message-bubble--user .message-bubble__header {
+  flex-direction: row-reverse;
+}
+
+.message-bubble__role {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.message-bubble__time {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.message-bubble__text {
+  padding: 0.85rem 1.1rem;
+  border-radius: var(--radius-lg);
+  line-height: 1.65;
+  font-size: 0.95rem;
+}
+
+.message-bubble--user .message-bubble__text {
+  background: var(--gradient-primary);
+  color: #fff;
+  border-bottom-right-radius: var(--radius-sm);
+}
+
+.message-bubble--ai .message-bubble__text {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--color-text);
+  border-bottom-left-radius: var(--radius-sm);
+}
+
+/* Markdown Content Styles */
+.message-bubble__text--markdown h1,
+.message-bubble__text--markdown h2,
+.message-bubble__text--markdown h3 {
+  margin: 0.75rem 0 0.35rem;
+  color: var(--color-text);
+}
+
+.message-bubble__text--markdown h1 { font-size: 1.15rem; }
+.message-bubble__text--markdown h2 { font-size: 1.05rem; }
+.message-bubble__text--markdown h3 { font-size: 0.95rem; }
+
+.message-bubble__text--markdown p {
+  margin: 0.4rem 0;
+}
+
+.message-bubble__text--markdown ul,
+.message-bubble__text--markdown ol {
+  margin: 0.4rem 0;
+  padding-left: 1.5rem;
+}
+
+.message-bubble__text--markdown li {
+  margin: 0.25rem 0;
+}
+
+.message-bubble__text--markdown code {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85em;
+}
+
+.message-bubble__text--markdown strong {
+  color: var(--color-primary-light);
+}
+
+.message-bubble__text--markdown a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .message-bubble {
+    max-width: 95%;
+  }
+}
