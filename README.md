@@ -78,6 +78,37 @@ npm run build
 npm run preview
 ```
 
+## ☁️ Google Cloud Deployment
+
+The project is fully configured and ready for deployment on Google Cloud. You can deploy it using either **Google Cloud Run** or **Google App Engine**.
+
+### Option 1: Deploy to Google Cloud Run (Recommended)
+Cloud Run is a managed compute platform that automatically scales your stateless containers. The repository includes a `Dockerfile` for easy containerization.
+
+```bash
+# 1. Build and submit your container image
+gcloud builds submit --tag gcr.io/YOUR_PROJECT_ID/step2vote
+
+# 2. Deploy to Cloud Run
+gcloud run deploy step2vote \
+  --image gcr.io/YOUR_PROJECT_ID/step2vote \
+  --platform managed \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --set-env-vars GEMINI_API_KEY="your_api_key_here"
+```
+
+### Option 2: Deploy to Google App Engine
+App Engine is a fully managed, serverless platform. The repository includes an `app.yaml` configuration file.
+
+```bash
+# Deploy directly using gcloud
+gcloud app deploy
+
+# After deployment, securely set your API key
+gcloud app deploy --update-env-vars GEMINI_API_KEY="your_api_key_here"
+```
+
 ## 🔒 Security
 
 - **Server-side API proxy**: API key is never exposed to the client

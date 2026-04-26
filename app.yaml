@@ -1,0 +1,17 @@
+runtime: nodejs20
+env: standard
+instance_class: F1
+
+# Handlers can optionally map static files but Express will serve them from dist/
+# Using auto will just pass traffic to our Express app
+handlers:
+  - url: /.*
+    script: auto
+
+# Exclude unnecessary files
+skip_files:
+  - ^node_modules/.*$
+  - ^\.git/.*$
+  - ^\.env$
+  - ^README\.md$
+  - ^\.gitignore$

@@ -13,6 +13,11 @@ import dotenv from 'dotenv';
 import { chatRouter } from './routes/chat.js';
 import { rateLimiter } from './middleware/rateLimiter.js';
 import { sanitizeInput } from './middleware/sanitizer.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -43,6 +48,18 @@ app.use('/api', chatRouter);
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
+
+/* ─── Production Static Serving ────────────────────────────────────── */
+if (process.env.NODE_ENV === 'production') {
+  // Serve static files from the React app
+  app.use(express.static(path.join(__dirname, '../dist')));
+
+  // The "catchall" handler: for any request that doesn't
+  // match one above, send back React's index.html file.
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'));
+  });
+}
 
 /* ─── Error Handling ───────────────────────────────────────────────── */
 
