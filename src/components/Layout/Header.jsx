@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NAV_LINKS } from '../../utils/constants';
 import { useAuth } from '../../hooks/useAuth';
+import CivicIcon from '../ui/CivicIcon';
 import './Header.css';
 
 export default function Header() {
@@ -31,7 +32,7 @@ export default function Header() {
     <header className="header" role="banner">
       <div className="header__container">
         <Link to="/" className="header__logo" aria-label="Step2Vote Home" onClick={closeMenu}>
-          <span className="header__logo-icon" aria-hidden="true">[ECI]</span>
+          <span className="header__logo-icon" aria-hidden="true"><CivicIcon name="eci" /></span>
           <span className="header__logo-text">
             Step<span className="header__logo-accent">2</span>Vote
           </span>
@@ -66,7 +67,7 @@ export default function Header() {
                   onClick={closeMenu}
                   aria-current={location.pathname === link.path ? 'page' : undefined}
                 >
-                  <span className="header__nav-icon" aria-hidden="true">{link.icon}</span>
+                  <span className="header__nav-icon" aria-hidden="true"><CivicIcon name={link.icon} /></span>
                   <span className="header__nav-label">{link.label}</span>
                 </Link>
               </li>
@@ -74,7 +75,7 @@ export default function Header() {
             <li className="header__nav-item">
               {currentUser ? (
                 <button className="header__nav-link header__nav-button" onClick={handleLogout}>
-                  <span className="header__nav-icon" aria-hidden="true">[OUT]</span>
+                  <span className="header__nav-icon" aria-hidden="true"><CivicIcon name="logout" /></span>
                   <span className="header__nav-label">Sign Out</span>
                 </button>
               ) : (
@@ -86,7 +87,7 @@ export default function Header() {
                   onClick={closeMenu}
                   aria-current={location.pathname === '/login' ? 'page' : undefined}
                 >
-                  <span className="header__nav-icon" aria-hidden="true">[IN]</span>
+                  <span className="header__nav-icon" aria-hidden="true"><CivicIcon name="login" /></span>
                   <span className="header__nav-label">Sign In</span>
                 </Link>
               )}

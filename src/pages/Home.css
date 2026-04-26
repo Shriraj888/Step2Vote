@@ -5,7 +5,7 @@
 .home {
   display: flex;
   flex-direction: column;
-  gap: 5rem;
+  gap: 4.25rem;
   padding-bottom: 3rem;
 }
 
@@ -16,8 +16,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 85vh;
-  padding: 4rem 1.5rem;
+  min-height: 78vh;
+  padding: 4.25rem 1.5rem 3rem;
   overflow: hidden;
 }
 
@@ -28,47 +28,19 @@
   overflow: hidden;
 }
 
-.home__hero-orb {
+.home__hero-bg::before {
+  content: '';
   position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.25;
-  animation: orbFloat 20s ease-in-out infinite;
+  inset: 10% 8%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 32px;
+  background:
+    linear-gradient(120deg, rgba(47, 111, 237, 0.18), transparent 45%),
+    linear-gradient(300deg, rgba(21, 163, 111, 0.12), transparent 42%);
 }
 
-.home__hero-orb--1 {
-  width: 500px;
-  height: 500px;
-  background: var(--color-primary);
-  top: -15%;
-  right: -10%;
-  animation-delay: 0s;
-}
-
-.home__hero-orb--2 {
-  width: 400px;
-  height: 400px;
-  background: var(--color-accent);
-  bottom: -10%;
-  left: -5%;
-  animation-delay: -7s;
-}
-
-.home__hero-orb--3 {
-  width: 300px;
-  height: 300px;
-  background: #06b6d4;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation-delay: -14s;
-}
-
-@keyframes orbFloat {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(30px, -20px) scale(1.05); }
-  50% { transform: translate(-20px, 30px) scale(0.95); }
-  75% { transform: translate(20px, 20px) scale(1.02); }
+.home__hero-orb {
+  display: none;
 }
 
 .home__hero-content {
@@ -79,25 +51,19 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-  animation: fadeUp 0.8s ease-out;
-}
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
+  gap: 1.45rem;
 }
 
 .home__hero-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.55rem;
   padding: 0.45rem 1rem;
-  background: rgba(99, 102, 241, 0.12);
-  border: 1px solid rgba(99, 102, 241, 0.25);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-full);
   font-size: 0.85rem;
-  color: var(--color-primary-light);
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 
@@ -105,7 +71,7 @@
   font-size: clamp(2.2rem, 5vw, 3.5rem);
   font-weight: 800;
   line-height: 1.15;
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
   color: var(--color-text);
 }
 
@@ -117,7 +83,7 @@
 }
 
 .home__hero-subtitle {
-  font-size: 1.15rem;
+  font-size: 1.08rem;
   line-height: 1.7;
   color: var(--color-text-secondary);
   max-width: 650px;
@@ -136,7 +102,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.85rem 1.75rem;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
@@ -177,9 +143,9 @@
   gap: 1.5rem;
   margin-top: 1rem;
   padding: 1rem 2rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.055);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
 }
 
 .home__stat {
@@ -202,7 +168,7 @@
   font-size: 0.75rem;
   color: var(--color-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
 }
 
 .home__stat-divider {
@@ -249,7 +215,7 @@
   padding: 1.75rem;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   text-decoration: none;
   color: var(--color-text);
   transition: all 0.3s ease;
@@ -284,14 +250,14 @@
 }
 
 .home__feature-icon {
-  font-size: 2rem;
+  font-size: 1.25rem;
   width: 48px;
   height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.055);
 }
 
 .home__feature-title {
@@ -338,7 +304,7 @@
   padding: 1.5rem;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
 }
 
 .home__how-step h3 {

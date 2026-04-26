@@ -15,37 +15,37 @@ export const QUICK_PROMPTS = [
   {
     id: 'register',
     label: 'Register with Form 6',
-    icon: '[REG]',
+    icon: 'register',
     prompt: 'How can an eligible Indian citizen register as a voter using Form 6 or the Voters Services Portal?',
   },
   {
     id: 'timeline',
     label: 'Election Timeline',
-    icon: '[TIME]',
+    icon: 'time',
     prompt: 'Explain the main stages of an Indian election from notification to result declaration.',
   },
   {
     id: 'evm-vvpat',
     label: 'EVM and VVPAT',
-    icon: '[EVM]',
+    icon: 'evm',
     prompt: 'How do EVMs and VVPATs work at an Indian polling station?',
   },
   {
     id: 'booth',
     label: 'Polling Booth',
-    icon: '[BOOTH]',
+    icon: 'booth',
     prompt: 'How do I find my polling booth and what should I carry on polling day in India?',
   },
   {
     id: 'mcc',
     label: 'Model Code',
-    icon: '[MCC]',
+    icon: 'mcc',
     prompt: 'What is the Model Code of Conduct and why does it matter during Indian elections?',
   },
   {
     id: 'first-time',
     label: 'First-Time Voter',
-    icon: '[NEW]',
+    icon: 'new',
     prompt: 'I am a first-time voter in India. What should I do before and on polling day?',
   },
 ];
@@ -62,7 +62,7 @@ export const ELECTION_TIMELINE = [
       'You should be ordinarily resident at the address where you apply.',
       'You should not be disqualified from voting under applicable election law.',
     ],
-    icon: '[OK]',
+    icon: 'ok',
     color: '#2E7D32',
   },
   {
@@ -75,7 +75,7 @@ export const ELECTION_TIMELINE = [
       'Track application status through the Voters Services Portal or voter helpline app.',
       'Verify your name on the electoral roll before polling day.',
     ],
-    icon: '[FORM]',
+    icon: 'form',
     color: '#1565C0',
   },
   {
@@ -88,7 +88,7 @@ export const ELECTION_TIMELINE = [
       'Local body elections cover municipal and Panchayati Raj institutions where applicable.',
       'Official schedules are announced by the Election Commission of India or the relevant State Election Commission.',
     ],
-    icon: '[CIVIC]',
+    icon: 'civic',
     color: '#EF6C00',
   },
   {
@@ -101,7 +101,7 @@ export const ELECTION_TIMELINE = [
       'Carry your EPIC card or another ECI-approved identity document.',
       'Check accessibility support if you need assistance at the polling station.',
     ],
-    icon: '[MAP]',
+    icon: 'map',
     color: '#6A1B9A',
   },
   {
@@ -114,7 +114,7 @@ export const ELECTION_TIMELINE = [
       'You cast your vote on the EVM and can verify the VVPAT slip for a few seconds.',
       'Ask polling staff for assistance if you are unsure or need accessibility support.',
     ],
-    icon: '[POLL]',
+    icon: 'poll',
     color: '#C62828',
   },
   {
@@ -127,7 +127,7 @@ export const ELECTION_TIMELINE = [
       'Report intimidation, impersonation, or misinformation to election authorities.',
       'Use official ECI and CEO sources for final instructions.',
     ],
-    icon: '[SAFE]',
+    icon: 'safe',
     color: '#00838F',
   },
   {
@@ -140,7 +140,7 @@ export const ELECTION_TIMELINE = [
       'Keep your voter details updated if you move or need corrections.',
       'Share official voter education resources with first-time voters in your community.',
     ],
-    icon: '[INFO]',
+    icon: 'info',
     color: '#455A64',
   },
 ];
@@ -205,9 +205,9 @@ export const CHECKLIST_ITEMS = [
 
 /** Navigation links used in the header. */
 export const NAV_LINKS = [
-  { path: '/', label: 'Home', icon: '[H]' },
-  { path: '/chat', label: 'Ask AI', icon: '[AI]' },
-  { path: '/learn', label: 'Learn', icon: '[L]' },
-  { path: '/quiz', label: 'Quiz', icon: '[Q]' },
-  { path: '/checklist', label: 'Checklist', icon: '[C]' },
+  { path: '/', label: 'Home', icon: 'home' },
+  { path: '/chat', label: 'Ask AI', icon: 'ai' },
+  { path: '/learn', label: 'Learn', icon: 'learn' },
+  { path: '/quiz', label: 'Quiz', icon: 'quiz' },
+  { path: '/checklist', label: 'Checklist', icon: 'check' },
 ];

@@ -76,6 +76,13 @@
 
 .chat__welcome-icon { font-size: 3rem; animation: bounce 2s infinite; }
 
+.chat__welcome-icon .civic-icon {
+  font-size: 1.6rem;
+  width: 3.2em;
+  height: 3.2em;
+  border-radius: 18px;
+}
+
 @keyframes bounce {
   0%,100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
@@ -111,7 +118,14 @@
 .chat__quick-btn:hover { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3); transform: translateY(-2px); }
 .chat__quick-btn:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 .chat__quick-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-.chat__quick-icon { font-size: 1.5rem; }
+.chat__quick-icon {
+  font-size: 1rem;
+}
+
+.chat__quick-icon .civic-icon {
+  width: 2.35em;
+  height: 2.35em;
+}
 .chat__quick-label { font-weight: 500; }
 
 /* Typing Indicator */
@@ -125,7 +139,7 @@
 .chat__typing-avatar {
   width: 36px; height: 36px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(255,255,255,0.06); font-size: 1.1rem;
+  background: rgba(255,255,255,0.06); font-size: 0.72rem;
 }
 
 .chat__typing-dots {

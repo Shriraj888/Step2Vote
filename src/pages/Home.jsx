@@ -7,12 +7,13 @@
  */
 
 import { Link } from 'react-router-dom';
+import CivicIcon from '../components/ui/CivicIcon';
 import './Home.css';
 
 const FEATURES = [
   {
     id: 'chat',
-    icon: '[AI]',
+    icon: 'ai',
     title: 'Ask the AI Assistant',
     description: 'Get non-partisan answers about Indian voter registration, polling booths, EVMs, VVPATs, and election timelines.',
     link: '/chat',
@@ -21,7 +22,7 @@ const FEATURES = [
   },
   {
     id: 'learn',
-    icon: '[GUIDE]',
+    icon: 'guide',
     title: 'Interactive ECI Timeline',
     description: 'Follow the Indian election journey from eligibility and Form 6 through polling day and counting.',
     link: '/learn',
@@ -30,7 +31,7 @@ const FEATURES = [
   },
   {
     id: 'quiz',
-    icon: '[QUIZ]',
+    icon: 'quiz',
     title: 'Test Your Knowledge',
     description: 'Practice with Gemini-generated quiz questions about Indian election rules, rights, and procedures.',
     link: '/quiz',
@@ -39,7 +40,7 @@ const FEATURES = [
   },
   {
     id: 'checklist',
-    icon: '[CHECK]',
+    icon: 'check',
     title: 'Firebase-Synced Checklist',
     description: 'Track voter readiness locally as a guest or sync progress to Firestore when signed in.',
     link: '/checklist',
@@ -60,7 +61,7 @@ export default function Home() {
 
         <div className="home__hero-content">
           <div className="home__hero-badge">
-            <span aria-hidden="true">[ECI]</span> Indian Election Education Companion
+            <CivicIcon name="eci" /> Indian Election Education Companion
           </div>
 
           <h1 id="hero-heading" className="home__hero-title">
@@ -77,10 +78,10 @@ export default function Home() {
 
           <div className="home__hero-actions">
             <Link to="/chat" className="home__hero-btn home__hero-btn--primary" id="hero-cta-chat">
-              <span aria-hidden="true">[AI]</span> Ask a Question
+              <CivicIcon name="ai" /> Ask a Question
             </Link>
             <Link to="/learn" className="home__hero-btn home__hero-btn--secondary" id="hero-cta-learn">
-              <span aria-hidden="true">[GUIDE]</span> Explore the Timeline
+              <CivicIcon name="guide" /> Explore the Timeline
             </Link>
           </div>
 
@@ -121,7 +122,7 @@ export default function Home() {
               style={{ '--card-accent': feature.color }}
             >
               <div className="home__feature-icon" aria-hidden="true">
-                {feature.icon}
+                <CivicIcon name={feature.icon} />
               </div>
               <h3 className="home__feature-title">{feature.title}</h3>
               <p className="home__feature-desc">{feature.description}</p>

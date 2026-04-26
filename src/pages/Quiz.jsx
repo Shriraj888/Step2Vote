@@ -8,15 +8,16 @@
 
 import { useState, useCallback } from 'react';
 import { generateQuiz } from '../services/api';
+import CivicIcon from '../components/ui/CivicIcon';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import './Quiz.css';
 
 const QUIZ_TOPICS = [
-  { id: 'general', label: 'Indian Election Process', icon: '[ECI]' },
-  { id: 'registration', label: 'Form 6 and Voter Registration', icon: '[REG]' },
-  { id: 'evm-vvpat', label: 'EVM and VVPAT', icon: '[EVM]' },
-  { id: 'rights', label: 'Voter Rights and Conduct', icon: '[RIGHTS]' },
-  { id: 'mcc', label: 'Model Code of Conduct', icon: '[MCC]' },
+  { id: 'general', label: 'Indian Election Process', icon: 'eci' },
+  { id: 'registration', label: 'Form 6 and Voter Registration', icon: 'register' },
+  { id: 'evm-vvpat', label: 'EVM and VVPAT', icon: 'evm' },
+  { id: 'rights', label: 'Voter Rights and Conduct', icon: 'rights' },
+  { id: 'mcc', label: 'Model Code of Conduct', icon: 'mcc' },
 ];
 
 export default function Quiz() {
@@ -88,20 +89,20 @@ export default function Quiz() {
     return (
       <div className="quiz">
         <header className="quiz__header">
-          <h1 className="quiz__title"><span aria-hidden="true">[QUIZ]</span> Indian Election Knowledge Quiz</h1>
+          <h1 className="quiz__title"><CivicIcon name="quiz" /> Indian Election Knowledge Quiz</h1>
           <p className="quiz__subtitle">Test your understanding of ECI-aligned voting processes. Choose a topic to begin.</p>
         </header>
 
         {error && (
           <div className="quiz__error" role="alert">
-            <span aria-hidden="true">[!]</span> {error}
+            <span aria-hidden="true">!</span> {error}
           </div>
         )}
 
         <div className="quiz__topics" role="group" aria-label="Quiz topics">
           {QUIZ_TOPICS.map((topic) => (
             <button key={topic.id} className="quiz__topic-btn" onClick={() => startQuiz(topic.label)} id={`quiz-topic-${topic.id}`}>
-              <span className="quiz__topic-icon" aria-hidden="true">{topic.icon}</span>
+              <span className="quiz__topic-icon" aria-hidden="true"><CivicIcon name={topic.icon} /></span>
               <span className="quiz__topic-label">{topic.label}</span>
               <span className="quiz__topic-count">5 Questions</span>
             </button>
@@ -125,7 +126,7 @@ export default function Quiz() {
       <div className="quiz quiz--centered">
         <div className="quiz__results">
           <div className="quiz__results-icon" aria-hidden="true">
-            {scorePercent >= 80 ? '[GREAT]' : scorePercent >= 60 ? '[GOOD]' : '[LEARN]'}
+            <CivicIcon name={scorePercent >= 80 ? 'ok' : scorePercent >= 60 ? 'check' : 'learn'} />
           </div>
           <h2 className="quiz__results-title">Quiz Complete!</h2>
           <div className="quiz__score-ring">

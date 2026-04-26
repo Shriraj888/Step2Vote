@@ -11,6 +11,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { useChat } from '../hooks/useChat';
 import { QUICK_PROMPTS } from '../utils/constants';
 import MessageBubble from '../components/Chat/MessageBubble';
+import CivicIcon from '../components/ui/CivicIcon';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import './Chat.css';
 
@@ -56,7 +57,7 @@ export default function Chat() {
       <div className="chat__header">
         <div className="chat__header-info">
           <h1 className="chat__title">
-            <span aria-hidden="true">[AI]</span> Ask Step2Vote
+            <CivicIcon name="ai" /> Ask Step2Vote
           </h1>
           <p className="chat__subtitle">
             Ask about Indian voter registration, ECI processes, polling day, EVMs, VVPATs, and civic rights.
@@ -68,7 +69,7 @@ export default function Chat() {
             onClick={clearChat}
             aria-label="Clear chat history"
           >
-            <span aria-hidden="true">[X]</span> Clear Chat
+            <CivicIcon name="safe" /> Clear Chat
           </button>
         )}
       </div>
@@ -82,7 +83,7 @@ export default function Chat() {
       >
         {!hasMessages && (
           <div className="chat__welcome">
-            <div className="chat__welcome-icon" aria-hidden="true">[ECI]</div>
+            <div className="chat__welcome-icon" aria-hidden="true"><CivicIcon name="eci" /></div>
             <h2 className="chat__welcome-title">Welcome to Step2Vote!</h2>
             <p className="chat__welcome-text">
               I&apos;m your AI election education assistant for India. Ask about
@@ -99,7 +100,7 @@ export default function Chat() {
                   disabled={isLoading}
                   id={`quick-prompt-${qp.id}`}
                 >
-                  <span className="chat__quick-icon" aria-hidden="true">{qp.icon}</span>
+                  <span className="chat__quick-icon" aria-hidden="true"><CivicIcon name={qp.icon} /></span>
                   <span className="chat__quick-label">{qp.label}</span>
                 </button>
               ))}
@@ -113,7 +114,7 @@ export default function Chat() {
 
         {isLoading && (
           <div className="chat__typing" aria-label="Step2Vote is typing">
-            <div className="chat__typing-avatar" aria-hidden="true">[AI]</div>
+            <div className="chat__typing-avatar" aria-hidden="true"><CivicIcon name="ai" /></div>
             <div className="chat__typing-dots">
               <span /><span /><span />
             </div>
@@ -122,7 +123,7 @@ export default function Chat() {
 
         {error && (
           <div className="chat__error" role="alert">
-            <span aria-hidden="true">[!]</span>
+            <span aria-hidden="true">!</span>
             <p>{error}</p>
           </div>
         )}

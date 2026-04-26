@@ -12,6 +12,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useAuth } from '../hooks/useAuth';
 import { CHECKLIST_ITEMS } from '../utils/constants';
 import { loadChecklistProgress, saveChecklistProgress } from '../services/voterProgress';
+import CivicIcon from '../components/ui/CivicIcon';
 import './Checklist.css';
 
 export default function Checklist() {
@@ -90,7 +91,7 @@ export default function Checklist() {
     <div className="checklist">
       <header className="checklist__header">
         <h1 className="checklist__title">
-          <span aria-hidden="true">[CHECK]</span> Voter Readiness Checklist
+          <CivicIcon name="check" /> Voter Readiness Checklist
         </h1>
         <p className="checklist__subtitle">
           Track your preparation for polling day. Guests are saved locally; signed-in users sync to Firebase.
@@ -131,7 +132,7 @@ export default function Checklist() {
 
       {progressPercent === 100 && (
         <div className="checklist__complete" role="status">
-          <span className="checklist__complete-icon" aria-hidden="true">[DONE]</span>
+          <span className="checklist__complete-icon" aria-hidden="true"><CivicIcon name="ok" /></span>
           <p className="checklist__complete-text">
             <strong>You&apos;re all set!</strong> You&apos;ve completed every step to prepare for polling day.
           </p>
@@ -158,7 +159,7 @@ export default function Checklist() {
                     aria-describedby={`desc-${item.id}`}
                   />
                   <span className="checklist__checkmark" aria-hidden="true">
-                    {checkedItems[item.id] ? 'OK' : ''}
+                    {checkedItems[item.id] ? <CivicIcon name="ok" /> : ''}
                   </span>
                   <div className="checklist__item-content">
                     <span className="checklist__item-label">{item.label}</span>

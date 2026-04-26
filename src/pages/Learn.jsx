@@ -8,6 +8,7 @@
 
 import { useState } from 'react';
 import { ELECTION_TIMELINE } from '../utils/constants';
+import CivicIcon from '../components/ui/CivicIcon';
 import './Learn.css';
 
 export default function Learn() {
@@ -21,7 +22,7 @@ export default function Learn() {
     <div className="learn">
       <header className="learn__header">
         <h1 className="learn__title">
-          <span aria-hidden="true">[GUIDE]</span> Indian Election Process Timeline
+          <CivicIcon name="guide" /> Indian Election Process Timeline
         </h1>
         <p className="learn__subtitle">
           Follow the voter journey from eligibility and registration to polling
@@ -53,7 +54,7 @@ export default function Learn() {
                 id={`step-header-${step.id}`}
               >
                 <div className="learn__step-number" aria-hidden="true">
-                  <span className="learn__step-icon">{step.icon}</span>
+                  <span className="learn__step-icon"><CivicIcon name={step.icon} /></span>
                 </div>
 
                 <div className="learn__step-info">

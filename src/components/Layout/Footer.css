@@ -1,5 +1,6 @@
 .footer {
-  background: rgba(10, 12, 28, 0.9);
+  background: rgba(8, 17, 31, 0.86);
+  backdrop-filter: blur(16px);
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   padding: 2.5rem 1.5rem;
   margin-top: auto;
@@ -21,6 +22,10 @@
   gap: 0.5rem;
   font-size: 1.2rem;
   font-weight: 700;
+}
+
+.footer__logo .civic-icon {
+  font-size: 0.95rem;
 }
 
 .footer__accent {
@@ -79,11 +84,18 @@
 .footer__badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.45rem;
   padding: 0.3rem 0.65rem;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius-full);
   font-size: 0.75rem;
   color: var(--color-text-secondary);
+}
+
+.footer__badge .civic-icon {
+  width: 1.45em;
+  height: 1.45em;
+  border-radius: 6px;
+  font-size: 0.8rem;
 }

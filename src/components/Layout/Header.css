@@ -2,7 +2,7 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: rgba(15, 18, 35, 0.85);
+  background: rgba(8, 17, 31, 0.84);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -27,7 +27,7 @@
   color: var(--color-text);
   font-size: 1.35rem;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   transition: opacity 0.2s ease;
 }
 
@@ -42,7 +42,7 @@
 }
 
 .header__logo-icon {
-  font-size: 1.5rem;
+  font-size: 0.85rem;
 }
 
 .header__logo-accent {
@@ -128,8 +128,8 @@
 }
 
 .header__nav-link--active {
-  color: var(--color-primary);
-  background: rgba(99, 102, 241, 0.12);
+  color: var(--color-primary-light);
+  background: rgba(47, 111, 237, 0.14);
 }
 
 .header__nav-link--active::after {
@@ -140,12 +140,18 @@
   transform: translateX(-50%);
   width: 60%;
   height: 2px;
-  background: var(--color-primary);
+  background: var(--color-primary-light);
   border-radius: 2px;
 }
 
 .header__nav-icon {
-  font-size: 1.05rem;
+  font-size: 0.72rem;
+}
+
+.header__nav-icon .civic-icon {
+  width: 1.8em;
+  height: 1.8em;
+  border-radius: 6px;
 }
 
 /* Mobile Responsive */
@@ -160,7 +166,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(10, 12, 28, 0.97);
+    background: rgba(8, 17, 31, 0.98);
     backdrop-filter: blur(20px);
     padding: 2rem 1.5rem;
     transform: translateX(100%);
