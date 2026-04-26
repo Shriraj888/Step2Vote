@@ -30,6 +30,12 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
+    if (!auth) {
+      console.warn("Firebase Auth is not initialized. Using fallback user state.");
+      setLoading(false);
+      return () => {};
+    }
+
     const unsubscribe = onAuthStateChanged(auth, user => {
       setCurrentUser(user);
       setLoading(false);
