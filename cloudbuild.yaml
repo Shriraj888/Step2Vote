@@ -36,3 +36,15 @@ steps:
 
 images:
   - 'gcr.io/$PROJECT_ID/step2vote'
+
+substitutions:
+  _GEMINI_API_KEY: ''
+  _VITE_FIREBASE_API_KEY: ''
+  _VITE_FIREBASE_AUTH_DOMAIN: ''
+  _VITE_FIREBASE_PROJECT_ID: ''
+  _VITE_FIREBASE_STORAGE_BUCKET: ''
+  _VITE_FIREBASE_MESSAGING_SENDER_ID: ''
+  _VITE_FIREBASE_APP_ID: ''
+
+options:
+  logging: CLOUD_LOGGING_ONLY
