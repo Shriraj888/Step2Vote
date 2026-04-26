@@ -1,29 +1,37 @@
 /**
  * Header Component
  *
- * Main application header with navigation.
- * Features responsive design and active link highlighting.
+ * Main application header with navigation and Firebase auth awareness.
  *
  * @component
  */
 
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NAV_LINKS } from '../../utils/constants';
+import { useAuth } from '../../hooks/useAuth';
 import './Header.css';
 
 export default function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { currentUser, logout } = useAuth();
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
   const closeMenu = () => setMenuOpen(false);
+
+  async function handleLogout() {
+    closeMenu();
+    await logout();
+    navigate('/');
+  }
 
   return (
     <header className="header" role="banner">
       <div className="header__container">
         <Link to="/" className="header__logo" aria-label="Step2Vote Home" onClick={closeMenu}>
-          <span className="header__logo-icon" aria-hidden="true">🗳️</span>
+          <span className="header__logo-icon" aria-hidden="true">[ECI]</span>
           <span className="header__logo-text">
             Step<span className="header__logo-accent">2</span>Vote
           </span>
@@ -63,6 +71,26 @@ export default function Header() {
                 </Link>
               </li>
             ))}
+            <li className="header__nav-item">
+              {currentUser ? (
+                <button className="header__nav-link header__nav-button" onClick={handleLogout}>
+                  <span className="header__nav-icon" aria-hidden="true">[OUT]</span>
+                  <span className="header__nav-label">Sign Out</span>
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  className={`header__nav-link ${
+                    location.pathname === '/login' ? 'header__nav-link--active' : ''
+                  }`}
+                  onClick={closeMenu}
+                  aria-current={location.pathname === '/login' ? 'page' : undefined}
+                >
+                  <span className="header__nav-icon" aria-hidden="true">[IN]</span>
+                  <span className="header__nav-label">Sign In</span>
+                </Link>
+              )}
+            </li>
           </ul>
         </nav>
       </div>

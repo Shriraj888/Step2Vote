@@ -25,12 +25,12 @@ describe('Learn Page', () => {
   it('renders all 7 timeline steps', () => {
     renderWithRouter(<Learn />);
     expect(screen.getByText(/Check Your Eligibility/i)).toBeInTheDocument();
-    expect(screen.getByText(/Register to Vote/i)).toBeInTheDocument();
-    expect(screen.getByText(/Research Candidates/i)).toBeInTheDocument();
-    expect(screen.getByText(/Know Your Voting Options/i)).toBeInTheDocument();
-    expect(screen.getByText(/Prepare for Election Day/i)).toBeInTheDocument();
-    expect(screen.getByText(/Cast Your Vote/i)).toBeInTheDocument();
-    expect(screen.getByText(/After You Vote/i)).toBeInTheDocument();
+    expect(screen.getByText(/Register or Update Your Details/i)).toBeInTheDocument();
+    expect(screen.getByText(/Understand the Election Type/i)).toBeInTheDocument();
+    expect(screen.getByText(/Find Your Polling Station/i)).toBeInTheDocument();
+    expect(screen.getByText(/Learn the Polling Day Flow/i)).toBeInTheDocument();
+    expect(screen.getByText(/Follow Safe and Non-Partisan Conduct/i)).toBeInTheDocument();
+    expect(screen.getByText(/Track Results and Stay Engaged/i)).toBeInTheDocument();
   });
 
   it('expands step details when clicked', async () => {

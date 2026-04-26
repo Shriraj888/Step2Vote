@@ -29,9 +29,9 @@ describe('Chat Page', () => {
 
   it('renders quick prompt buttons', () => {
     renderWithRouter(<Chat />);
-    expect(screen.getByText('How to Register')).toBeInTheDocument();
+    expect(screen.getByText('Register with Form 6')).toBeInTheDocument();
     expect(screen.getByText('Election Timeline')).toBeInTheDocument();
-    expect(screen.getByText('Voting Methods')).toBeInTheDocument();
+    expect(screen.getByText('EVM and VVPAT')).toBeInTheDocument();
   });
 
   it('has an accessible chat input with label', () => {

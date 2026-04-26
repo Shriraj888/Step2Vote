@@ -1,78 +1,79 @@
 /**
  * Input Sanitization Middleware
  *
- * Validates and sanitizes all incoming request bodies to prevent
- * injection attacks and ensure data integrity.
+ * Validates and sanitizes incoming request bodies before they reach Gemini.
  *
  * @module middleware/sanitizer
  */
 
-/** Maximum allowed length for user messages */
 const MAX_MESSAGE_LENGTH = 2000;
+const MAX_TOPIC_LENGTH = 120;
+const MAX_HISTORY_TURNS = 10;
 
-/** Pattern to detect potential prompt injection attempts */
 const DANGEROUS_PATTERNS = [
   /<script\b[^>]*>/gi,
   /javascript:/gi,
   /on\w+\s*=/gi,
+  /data:text\/html/gi,
 ];
 
-/**
- * Strips HTML tags from a string to prevent XSS.
- * @param {string} str - The input string to sanitize.
- * @returns {string} The sanitized string with HTML tags removed.
- */
 function stripHtmlTags(str) {
   return str.replace(/<[^>]*>/g, '');
 }
 
-/**
- * Validates that the input doesn't contain dangerous patterns.
- * @param {string} input - The input string to validate.
- * @returns {boolean} True if the input is safe.
- */
 function isSafeInput(input) {
   return !DANGEROUS_PATTERNS.some((pattern) => pattern.test(input));
 }
 
-/**
- * Express middleware that sanitizes request body inputs.
- * Validates message length, strips HTML, and checks for injection patterns.
- *
- * @param {import('express').Request} req
- * @param {import('express').Response} res
- * @param {import('express').NextFunction} next
- */
+function cleanText(value, maxLength, fieldName) {
+  if (value === undefined) return undefined;
+  if (typeof value !== 'string') {
+    const error = new Error(`${fieldName} must be a string.`);
+    error.status = 400;
+    throw error;
+  }
+  if (value.length > maxLength) {
+    const error = new Error(`${fieldName} is too long. Maximum ${maxLength} characters allowed.`);
+    error.status = 400;
+    throw error;
+  }
+  if (!isSafeInput(value)) {
+    const error = new Error(`${fieldName} contains disallowed content.`);
+    error.status = 400;
+    throw error;
+  }
+  return stripHtmlTags(value).trim();
+}
+
+function cleanHistory(history) {
+  if (history === undefined) return undefined;
+  if (!Array.isArray(history)) {
+    const error = new Error('History must be an array.');
+    error.status = 400;
+    throw error;
+  }
+
+  return history.slice(-MAX_HISTORY_TURNS).map((turn) => ({
+    role: turn?.role === 'user' ? 'user' : 'model',
+    text: cleanText(String(turn?.text || ''), MAX_MESSAGE_LENGTH, 'History text'),
+  })).filter((turn) => turn.text);
+}
+
 export function sanitizeInput(req, res, next) {
   if (req.method !== 'POST') return next();
 
-  const { message } = req.body;
+  try {
+    req.body.message = cleanText(req.body.message, MAX_MESSAGE_LENGTH, 'Message');
+    req.body.topic = cleanText(req.body.topic, MAX_TOPIC_LENGTH, 'Topic');
+    req.body.history = cleanHistory(req.body.history);
 
-  // Validate message exists and is a string
-  if (message !== undefined) {
-    if (typeof message !== 'string') {
-      return res.status(400).json({
-        error: 'Message must be a string.',
-      });
+    if (req.body.count !== undefined) {
+      const numericCount = Number.parseInt(req.body.count, 10);
+      req.body.count = Number.isFinite(numericCount) ? numericCount : 5;
     }
 
-    // Check message length
-    if (message.length > MAX_MESSAGE_LENGTH) {
-      return res.status(400).json({
-        error: `Message too long. Maximum ${MAX_MESSAGE_LENGTH} characters allowed.`,
-      });
-    }
-
-    // Check for dangerous patterns
-    if (!isSafeInput(message)) {
-      return res.status(400).json({
-        error: 'Message contains disallowed content.',
-      });
-    }
-
-    // Sanitize the message by stripping HTML tags
-    req.body.message = stripHtmlTags(message).trim();
+    return next();
+  } catch (error) {
+    return res.status(error.status || 400).json({ error: error.message });
   }
-
-  next();
 }

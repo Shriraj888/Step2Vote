@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
+import { trackEvent } from '../firebase';
 import './Login.css';
 
 export default function Login() {
@@ -18,11 +19,13 @@ export default function Login() {
       setError('');
       setLoading(true);
       await login(email, password);
+      trackEvent('login', { method: 'password' });
       navigate('/home');
     } catch (err) {
       setError('Failed to log in: ' + err.message);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   return (

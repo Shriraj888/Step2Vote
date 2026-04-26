@@ -1,7 +1,7 @@
 /**
  * Quiz Page
  *
- * AI-generated election knowledge quiz with scoring and explanations.
+ * AI-generated Indian election knowledge quiz with scoring and explanations.
  *
  * @component
  */
@@ -11,13 +11,12 @@ import { generateQuiz } from '../services/api';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
 import './Quiz.css';
 
-/** Available quiz topics */
 const QUIZ_TOPICS = [
-  { id: 'general', label: 'General Election Process', icon: '🗳️' },
-  { id: 'registration', label: 'Voter Registration', icon: '📝' },
-  { id: 'methods', label: 'Voting Methods', icon: '✉️' },
-  { id: 'rights', label: 'Voter Rights', icon: '⚖️' },
-  { id: 'timeline', label: 'Election Timeline', icon: '📅' },
+  { id: 'general', label: 'Indian Election Process', icon: '[ECI]' },
+  { id: 'registration', label: 'Form 6 and Voter Registration', icon: '[REG]' },
+  { id: 'evm-vvpat', label: 'EVM and VVPAT', icon: '[EVM]' },
+  { id: 'rights', label: 'Voter Rights and Conduct', icon: '[RIGHTS]' },
+  { id: 'mcc', label: 'Model Code of Conduct', icon: '[MCC]' },
 ];
 
 export default function Quiz() {
@@ -85,18 +84,17 @@ export default function Quiz() {
   const currentQ = questions[currentIndex];
   const scorePercent = questions.length > 0 ? Math.round((score / questions.length) * 100) : 0;
 
-  // Topic Selection Screen
   if (questions.length === 0 && !isLoading) {
     return (
       <div className="quiz">
         <header className="quiz__header">
-          <h1 className="quiz__title"><span aria-hidden="true">❓</span> Election Knowledge Quiz</h1>
-          <p className="quiz__subtitle">Test your understanding of the election process. Choose a topic to begin.</p>
+          <h1 className="quiz__title"><span aria-hidden="true">[QUIZ]</span> Indian Election Knowledge Quiz</h1>
+          <p className="quiz__subtitle">Test your understanding of ECI-aligned voting processes. Choose a topic to begin.</p>
         </header>
 
         {error && (
           <div className="quiz__error" role="alert">
-            <span aria-hidden="true">⚠️</span> {error}
+            <span aria-hidden="true">[!]</span> {error}
           </div>
         )}
 
@@ -113,23 +111,21 @@ export default function Quiz() {
     );
   }
 
-  // Loading Screen
   if (isLoading) {
     return (
       <div className="quiz quiz--centered">
         <LoadingSpinner size="lg" label="Generating quiz questions..." />
-        <p className="quiz__loading-text">Our AI is crafting your quiz. This may take a moment.</p>
+        <p className="quiz__loading-text">Gemini is crafting ECI-aligned questions. This may take a moment.</p>
       </div>
     );
   }
 
-  // Results Screen
   if (isFinished) {
     return (
       <div className="quiz quiz--centered">
         <div className="quiz__results">
           <div className="quiz__results-icon" aria-hidden="true">
-            {scorePercent >= 80 ? '🏆' : scorePercent >= 60 ? '👍' : '📚'}
+            {scorePercent >= 80 ? '[GREAT]' : scorePercent >= 60 ? '[GOOD]' : '[LEARN]'}
           </div>
           <h2 className="quiz__results-title">Quiz Complete!</h2>
           <div className="quiz__score-ring">
@@ -144,7 +140,7 @@ export default function Quiz() {
             </span>
           </div>
           <p className="quiz__results-message">
-            {scorePercent >= 80 ? 'Excellent! You\'re well-prepared!' : scorePercent >= 60 ? 'Good job! Keep learning!' : 'Keep studying — you\'ll improve!'}
+            {scorePercent >= 80 ? 'Excellent! You understand the voting process well.' : scorePercent >= 60 ? 'Good job! Keep verifying details from official ECI sources.' : 'Keep learning. The timeline and checklist can help you prepare.'}
           </p>
           <button className="quiz__restart-btn" onClick={resetQuiz}>Try Another Topic</button>
         </div>
@@ -152,7 +148,6 @@ export default function Quiz() {
     );
   }
 
-  // Question Screen
   return (
     <div className="quiz">
       <div className="quiz__progress-bar">
@@ -178,12 +173,12 @@ export default function Quiz() {
             }
 
             return (
-              <button key={i} className={optionClass} onClick={() => handleAnswer(i)}
+              <button key={option} className={optionClass} onClick={() => handleAnswer(i)}
                 disabled={selectedAnswer !== null} aria-label={`Option ${String.fromCharCode(65 + i)}: ${option}`}>
                 <span className="quiz__option-letter" aria-hidden="true">{String.fromCharCode(65 + i)}</span>
                 <span className="quiz__option-text">{option}</span>
-                {selectedAnswer !== null && i === currentQ.correctIndex && <span className="quiz__option-icon" aria-hidden="true">✓</span>}
-                {selectedAnswer === i && i !== currentQ.correctIndex && <span className="quiz__option-icon" aria-hidden="true">✗</span>}
+                {selectedAnswer !== null && i === currentQ.correctIndex && <span className="quiz__option-icon" aria-hidden="true">OK</span>}
+                {selectedAnswer === i && i !== currentQ.correctIndex && <span className="quiz__option-icon" aria-hidden="true">NO</span>}
               </button>
             );
           })}
@@ -197,7 +192,7 @@ export default function Quiz() {
 
         {selectedAnswer !== null && (
           <button className="quiz__next-btn" onClick={nextQuestion}>
-            {currentIndex + 1 >= questions.length ? 'See Results' : 'Next Question'} →
+            {currentIndex + 1 >= questions.length ? 'See Results' : 'Next Question'} -&gt;
           </button>
         )}
       </div>

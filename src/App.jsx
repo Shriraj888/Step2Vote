@@ -43,7 +43,7 @@ export default function App() {
           <main id="main-content" className="app__main" role="main" tabIndex={-1}>
             <Suspense fallback={<PageLoader />}>
               <Routes>
-                <Route path="/" element={<Login />} />
+                <Route path="/" element={<Home />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />

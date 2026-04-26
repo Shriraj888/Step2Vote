@@ -1,7 +1,7 @@
 /**
  * Chat Page
  *
- * AI-powered election Q&A interface with conversation history,
+ * AI-powered Indian election Q&A interface with conversation history,
  * quick-start prompts, and markdown-rendered responses.
  *
  * @component
@@ -20,19 +20,16 @@ export default function Chat() {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  /** Auto-scroll to latest message */
   useEffect(() => {
     if (messagesEndRef.current && typeof messagesEndRef.current.scrollIntoView === 'function') {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isLoading]);
 
-  /** Focus input on mount */
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  /** Handle form submission */
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
@@ -40,13 +37,11 @@ export default function Chat() {
     setInput('');
   }, [input, isLoading, sendMessage]);
 
-  /** Handle quick prompt click */
   const handleQuickPrompt = useCallback((prompt) => {
     if (isLoading) return;
     sendMessage(prompt);
   }, [isLoading, sendMessage]);
 
-  /** Handle keyboard: Enter sends, Shift+Enter for newline */
   const handleKeyDown = useCallback((e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -61,10 +56,10 @@ export default function Chat() {
       <div className="chat__header">
         <div className="chat__header-info">
           <h1 className="chat__title">
-            <span aria-hidden="true">💬</span> Ask Step2Vote
+            <span aria-hidden="true">[AI]</span> Ask Step2Vote
           </h1>
           <p className="chat__subtitle">
-            Ask anything about elections, voting, and the democratic process.
+            Ask about Indian voter registration, ECI processes, polling day, EVMs, VVPATs, and civic rights.
           </p>
         </div>
         {hasMessages && (
@@ -73,12 +68,11 @@ export default function Chat() {
             onClick={clearChat}
             aria-label="Clear chat history"
           >
-            <span aria-hidden="true">🗑️</span> Clear Chat
+            <span aria-hidden="true">[X]</span> Clear Chat
           </button>
         )}
       </div>
 
-      {/* Messages Area */}
       <div
         className="chat__messages"
         role="log"
@@ -88,12 +82,12 @@ export default function Chat() {
       >
         {!hasMessages && (
           <div className="chat__welcome">
-            <div className="chat__welcome-icon" aria-hidden="true">🗳️</div>
+            <div className="chat__welcome-icon" aria-hidden="true">[ECI]</div>
             <h2 className="chat__welcome-title">Welcome to Step2Vote!</h2>
             <p className="chat__welcome-text">
-              I&apos;m your AI election education assistant. Ask me anything about
-              voter registration, election timelines, voting methods, or get started
-              with one of the prompts below.
+              I&apos;m your AI election education assistant for India. Ask about
+              Form 6, EPIC details, polling stations, EVM/VVPAT, the Model Code
+              of Conduct, or start with one of the prompts below.
             </p>
 
             <div className="chat__quick-prompts" role="group" aria-label="Quick question suggestions">
@@ -119,7 +113,7 @@ export default function Chat() {
 
         {isLoading && (
           <div className="chat__typing" aria-label="Step2Vote is typing">
-            <div className="chat__typing-avatar" aria-hidden="true">🗳️</div>
+            <div className="chat__typing-avatar" aria-hidden="true">[AI]</div>
             <div className="chat__typing-dots">
               <span /><span /><span />
             </div>
@@ -128,7 +122,7 @@ export default function Chat() {
 
         {error && (
           <div className="chat__error" role="alert">
-            <span aria-hidden="true">⚠️</span>
+            <span aria-hidden="true">[!]</span>
             <p>{error}</p>
           </div>
         )}
@@ -136,10 +130,9 @@ export default function Chat() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area */}
       <form className="chat__input-area" onSubmit={handleSubmit}>
         <label htmlFor="chat-input" className="sr-only">
-          Type your question about elections
+          Type your question about Indian elections
         </label>
         <input
           ref={inputRef}
@@ -149,7 +142,7 @@ export default function Chat() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask about elections, voting, registration..."
+          placeholder="Ask about Form 6, EVM, VVPAT, polling booths..."
           disabled={isLoading}
           autoComplete="off"
           maxLength={2000}

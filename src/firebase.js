@@ -1,21 +1,37 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "dummy_api_key",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "dummy_auth_domain",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "dummy_project_id",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "dummy_storage_bucket",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "dummy_sender_id",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "dummy_app_id"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-let app, auth;
-try {
+const requiredConfigKeys = ['apiKey', 'authDomain', 'projectId', 'appId'];
+export const isFirebaseConfigured = requiredConfigKeys.every((key) => Boolean(firebaseConfig[key]));
+
+let app = null;
+let auth = null;
+
+if (isFirebaseConfigured) {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
-} catch (error) {
-  console.error("Firebase initialization error", error);
+} else {
+  console.warn('Firebase is not configured. Auth, Firestore sync, and Analytics are disabled.');
 }
 
-export { auth };
+export async function trackEvent(name, params = {}) {
+  if (!app || !firebaseConfig.measurementId) return;
+
+  const { getAnalytics, isSupported, logEvent } = await import('firebase/analytics');
+  const supported = await isSupported().catch(() => false);
+  if (!supported) return;
+
+  logEvent(getAnalytics(app), name, params);
+}
+
+export { app, auth };

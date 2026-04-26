@@ -1,8 +1,7 @@
 /**
- * Learn Page — Interactive Election Timeline
+ * Learn Page - Interactive Indian Election Timeline
  *
- * Displays the election process as expandable timeline steps.
- * Users can click each step to see detailed information.
+ * Displays the voting process as expandable timeline steps.
  *
  * @component
  */
@@ -22,10 +21,11 @@ export default function Learn() {
     <div className="learn">
       <header className="learn__header">
         <h1 className="learn__title">
-          <span aria-hidden="true">📚</span> Election Process Timeline
+          <span aria-hidden="true">[GUIDE]</span> Indian Election Process Timeline
         </h1>
         <p className="learn__subtitle">
-          Follow the complete journey from eligibility to Election Day and beyond.
+          Follow the voter journey from eligibility and registration to polling
+          station conduct, VVPAT verification, and official result tracking.
           Click each step to learn more.
         </p>
       </header>
@@ -41,7 +41,6 @@ export default function Learn() {
               role="listitem"
               style={{ '--step-color': step.color }}
             >
-              {/* Timeline connector */}
               {index < ELECTION_TIMELINE.length - 1 && (
                 <div className="learn__connector" aria-hidden="true" />
               )}
@@ -65,7 +64,7 @@ export default function Learn() {
                 </div>
 
                 <div className={`learn__step-arrow ${isExpanded ? 'learn__step-arrow--open' : ''}`} aria-hidden="true">
-                  ▾
+                  v
                 </div>
               </button>
 
@@ -77,9 +76,9 @@ export default function Learn() {
                 hidden={!isExpanded}
               >
                 <ul className="learn__detail-list">
-                  {step.details.map((detail, i) => (
-                    <li key={i} className="learn__detail-item">
-                      <span className="learn__detail-bullet" aria-hidden="true">•</span>
+                  {step.details.map((detail) => (
+                    <li key={detail} className="learn__detail-item">
+                      <span className="learn__detail-bullet" aria-hidden="true">-</span>
                       {detail}
                     </li>
                   ))}
@@ -93,7 +92,7 @@ export default function Learn() {
       <div className="learn__cta">
         <p className="learn__cta-text">
           Have questions about any step?{' '}
-          <a href="/chat" className="learn__cta-link">Ask our AI assistant →</a>
+          <a href="/chat" className="learn__cta-link">Ask our AI assistant -&gt;</a>
         </p>
       </div>
     </div>

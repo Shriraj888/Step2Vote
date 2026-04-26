@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
+import { trackEvent } from '../firebase';
 import './Signup.css';
 
 export default function Signup() {
@@ -24,11 +25,13 @@ export default function Signup() {
       setError('');
       setLoading(true);
       await signup(email, password);
+      trackEvent('sign_up', { method: 'password' });
       navigate('/home');
     } catch (err) {
       setError('Failed to create an account: ' + err.message);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   return (

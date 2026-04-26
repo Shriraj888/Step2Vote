@@ -1,102 +1,119 @@
 /**
  * Chat API Routes
  *
- * Handles communication with the Google Gemini 2.5 Flash model.
- * Provides endpoints for:
- *   - /api/chat  — General election Q&A
- *   - /api/quiz  — Generate quiz questions
+ * Handles communication with Google Gemini for Indian election education.
  *
  * @module routes/chat
  */
 
 import { Router } from 'express';
-import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
+import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
 
 export const chatRouter = Router();
 
-/* ─── Helpers ──────────────────────────────────────────────────────── */
+const MAX_HISTORY_TURNS = 10;
+const MAX_HISTORY_TEXT_LENGTH = 2000;
+const MAX_TOPIC_LENGTH = 120;
+const MODEL_NAME = 'gemini-2.5-flash';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function extractJSON(text) {
-  if (!text) return null;
-  
-  // Try direct parse first
+export function isGeminiConfigured() {
+  const apiKey = process.env.GEMINI_API_KEY;
+  return Boolean(apiKey && apiKey !== 'your_gemini_api_key_here');
+}
+
+function tryParseJSON(text) {
   try {
     return JSON.parse(text);
-  } catch (e) {
-    // ignore
+  } catch {
+    return null;
   }
+}
 
-  // Try to extract from markdown code block
+function extractJSON(text) {
+  if (!text) return null;
+
+  const directJSON = tryParseJSON(text);
+  if (directJSON) return directJSON;
+
   const codeBlockMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
   if (codeBlockMatch) {
-    try {
-      return JSON.parse(codeBlockMatch[1].trim());
-    } catch (e) {
-      // ignore
-    }
+    const blockJSON = tryParseJSON(codeBlockMatch[1].trim());
+    if (blockJSON) return blockJSON;
   }
 
-  // Try to find JSON array or object in text anywhere
-  const firstOpenObj = text.indexOf('{');
-  const lastCloseObj = text.lastIndexOf('}');
-  const firstOpenArr = text.indexOf('[');
-  const lastCloseArr = text.lastIndexOf(']');
+  const candidates = [
+    [text.indexOf('['), text.lastIndexOf(']')],
+    [text.indexOf('{'), text.lastIndexOf('}')],
+  ];
 
-  // Check if array is the outermost container
-  if (firstOpenArr !== -1 && lastCloseArr !== -1 && lastCloseArr > firstOpenArr && 
-      (firstOpenObj === -1 || firstOpenArr < firstOpenObj)) {
-    try {
-      const jsonStr = text.substring(firstOpenArr, lastCloseArr + 1);
-      return JSON.parse(jsonStr);
-    } catch (e) {
-      // ignore
-    }
-  }
-
-  // Check if object is the outermost container
-  if (firstOpenObj !== -1 && lastCloseObj !== -1 && lastCloseObj > firstOpenObj) {
-    try {
-      const jsonStr = text.substring(firstOpenObj, lastCloseObj + 1);
-      return JSON.parse(jsonStr);
-    } catch (e) {
-      // ignore
+  for (const [start, end] of candidates) {
+    if (start !== -1 && end > start) {
+      const parsed = tryParseJSON(text.substring(start, end + 1));
+      if (parsed) return parsed;
     }
   }
 
   return null;
 }
 
-/* ─── System Prompt ────────────────────────────────────────────────── */
+function sanitizeHistory(history) {
+  if (!Array.isArray(history)) return [];
+
+  return history
+    .slice(-MAX_HISTORY_TURNS)
+    .filter((turn) => {
+      const hasValidRole = turn?.role === 'user' || turn?.role === 'model' || turn?.role === 'assistant';
+      const hasText = typeof turn?.text === 'string' && turn.text.trim().length > 0;
+      return hasValidRole && hasText;
+    })
+    .map((turn) => ({
+      role: turn.role === 'user' ? 'user' : 'model',
+      parts: [{ text: turn.text.slice(0, MAX_HISTORY_TEXT_LENGTH).trim() }],
+    }));
+}
+
+function validateQuizQuestions(questions, expectedCount) {
+  if (!Array.isArray(questions)) return null;
+
+  return questions.slice(0, expectedCount).filter((question) => (
+    typeof question?.question === 'string'
+    && Array.isArray(question.options)
+    && question.options.length === 4
+    && Number.isInteger(question.correctIndex)
+    && question.correctIndex >= 0
+    && question.correctIndex <= 3
+    && typeof question.explanation === 'string'
+  ));
+}
 
 const SYSTEM_PROMPT = `You are "Step2Vote", a friendly, non-partisan election education assistant focused strictly on the democratic and electoral process of India. Your role is to help users understand the Indian election process, timelines, and voting steps as mandated by the Election Commission of India (ECI).
 
-GUIDELINES:
+Guidelines:
 1. Be accurate, clear, and non-partisan at all times.
-2. Explain Indian election processes step-by-step in simple language (e.g., Lok Sabha, Rajya Sabha, Vidhan Sabha, Panchayati Raj).
-3. Cover topics like voter registration (Form 6, EPIC card), polling booths, Electronic Voting Machines (EVMs), VVPATs, election timelines, and election day procedures in India.
-4. When asked about specific states or constituencies in India, provide relevant information when possible or direct users to the official ECI website (eci.gov.in) or Chief Electoral Officer (CEO) websites.
+2. Explain Indian election processes step by step in simple language, including Lok Sabha, Rajya Sabha, Vidhan Sabha, and local body contexts when relevant.
+3. Cover voter registration, Form 6, Form 8, EPIC, polling booths, EVMs, VVPATs, election timelines, accessibility support, and polling day procedures in India.
+4. Direct users to official ECI, Voters Services Portal, voter helpline, or Chief Electoral Officer sources for final verification.
 5. Use bullet points and numbered lists for clarity.
-6. Always encourage users to verify information through official Indian election websites (like NVSP/Voters' Services Portal).
-7. NEVER express political opinions, endorse candidates, or show bias toward any Indian political party.
-8. If a question is outside your scope or about non-Indian elections, politely redirect to appropriate official resources or state that you only cover Indian elections.
-9. Use simple, inclusive language accessible to first-time Indian voters.
-10. Include relevant information about the Model Code of Conduct (MCC) when appropriate.
+6. Never express political opinions, endorse candidates, compare parties, predict outcomes, or persuade users toward a political choice.
+7. If a question is outside Indian elections, voting, or civic election processes, politely redirect to the app scope.
+8. Use simple, inclusive language accessible to first-time voters.
+9. Include the Model Code of Conduct when relevant.
 
-IMPORTANT: You must refuse to answer questions unrelated to Indian elections, voting, or civic processes. Politely explain that you can only help with India's election-related topics.`;
+Important: Refuse unrelated or partisan requests. Explain that Step2Vote only helps with non-partisan Indian election education.`;
 
-const QUIZ_SYSTEM_PROMPT = `You are "Step2Vote", an election education quiz generator focused on the Indian electoral system. Generate quiz questions about the election process in India.
+const QUIZ_SYSTEM_PROMPT = `You are "Step2Vote", an election education quiz generator focused on the Indian electoral system.
 
-RULES:
+Rules:
 1. Generate exactly the number of questions requested.
-2. Each question must have exactly 4 options (A, B, C, D).
-3. Include the correct answer and a brief explanation.
-4. Questions should cover: Indian voter registration (EPIC, Form 6), the Election Commission of India (ECI), EVMs & VVPATs, types of elections (Lok Sabha, State Assemblies), Model Code of Conduct, and Indian civic voting rights.
-5. Keep questions educational, accurate to the Indian system, and non-partisan.
-6. Vary difficulty levels.
+2. Each question must have exactly 4 options.
+3. Include correctIndex and a brief explanation.
+4. Cover Indian voter registration, EPIC, Form 6, Form 8, ECI, EVMs, VVPATs, Lok Sabha, State Assembly elections, Model Code of Conduct, voter rights, polling stations, and accessibility support.
+5. Keep questions educational, accurate, non-partisan, and beginner friendly.
+6. Respond with valid JSON only, no markdown.
 
-RESPONSE FORMAT — You MUST respond with valid JSON only, no markdown:
+Response schema:
 [
   {
     "question": "What is the question?",
@@ -106,8 +123,6 @@ RESPONSE FORMAT — You MUST respond with valid JSON only, no markdown:
   }
 ]`;
 
-/* ─── Safety Settings ──────────────────────────────────────────────── */
-
 const safetySettings = [
   { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
   { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
@@ -115,35 +130,24 @@ const safetySettings = [
   { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
 ];
 
-/* ─── Gemini Client Setup ──────────────────────────────────────────── */
-
-/**
- * Creates and returns a configured Gemini generative model instance.
- * @param {string} systemInstruction - The system instruction for the model.
- * @returns {import('@google/generative-ai').GenerativeModel} The configured model.
- * @throws {Error} If GEMINI_API_KEY is not configured.
- */
 function getModel(systemInstruction) {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey || apiKey === 'your_gemini_api_key_here') {
+  if (!isGeminiConfigured()) {
     throw new Error('GEMINI_API_KEY is not configured. Please add it to your .env file.');
   }
 
-  const genAI = new GoogleGenerativeAI(apiKey);
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   return genAI.getGenerativeModel({
-    model: 'gemini-2.5-flash',
+    model: MODEL_NAME,
     systemInstruction,
     safetySettings,
     generationConfig: {
-      temperature: 0.7,
+      temperature: 0.5,
       topP: 0.9,
       topK: 40,
       maxOutputTokens: 2048,
     },
   });
 }
-
-/* ─── Chat Endpoint ────────────────────────────────────────────────── */
 
 chatRouter.post('/chat', async (req, res) => {
   try {
@@ -154,61 +158,50 @@ chatRouter.post('/chat', async (req, res) => {
     }
 
     const model = getModel(SYSTEM_PROMPT);
+    const formattedHistory = sanitizeHistory(history);
 
-    // Build chat history from previous turns
-    const formattedHistory = history
-      .filter((turn) => turn.role && turn.text)
-      .map((turn) => ({
-        role: turn.role === 'user' ? 'user' : 'model',
-        parts: [{ text: turn.text }],
-      }));
-
-    for (let attempt = 1; attempt <= 2; attempt++) {
+    for (let attempt = 1; attempt <= 2; attempt += 1) {
       try {
         const chat = model.startChat({ history: formattedHistory });
         const result = await chat.sendMessage(message.trim());
-        const response = result.response.text();
-        return res.json({ response });
+        return res.json({ response: result.response.text() });
       } catch (err) {
         const statusCode = err.status || err.statusCode;
-        if (statusCode === 429 || statusCode === 503) {
-          if (attempt < 2) {
-            await delay(1000);
-            continue;
-          }
+        if ((statusCode === 429 || statusCode === 503) && attempt < 2) {
+          await delay(1000);
+          continue;
         }
-        if (err.message && err.message.includes('API key not valid')) {
+        if (err.message?.includes('API key not valid')) {
           return res.status(401).json({ error: 'Invalid Gemini API key. Please check your key.' });
         }
-        if (attempt === 2) {
-          throw err;
-        }
+        throw err;
       }
     }
+
+    return res.status(502).json({ error: 'Gemini did not return a response. Please try again.' });
   } catch (error) {
     console.error('[Chat Error]', error.message);
-    res.status(500).json({ error: 'Failed to generate response. Please try again.' });
+    return res.status(500).json({ error: 'Failed to generate response. Please try again.' });
   }
 });
 
-/* ─── Quiz Endpoint ────────────────────────────────────────────────── */
-
 chatRouter.post('/quiz', async (req, res) => {
   try {
-    const { count = 5, topic = 'general election process' } = req.body;
+    const rawCount = Number.parseInt(req.body.count, 10);
+    const questionCount = Math.min(Math.max(rawCount || 5, 1), 10);
+    const rawTopic = typeof req.body.topic === 'string' ? req.body.topic : 'Indian election process';
+    const topic = rawTopic.slice(0, MAX_TOPIC_LENGTH).trim() || 'Indian election process';
 
-    const questionCount = Math.min(Math.max(parseInt(count, 10) || 5, 1), 10);
     const model = getModel(QUIZ_SYSTEM_PROMPT);
-    const prompt = `Generate ${questionCount} quiz questions about: ${topic}. Respond with valid JSON only.`;
+    const prompt = `Generate ${questionCount} quiz questions about this Indian election education topic: ${topic}. Respond with valid JSON only.`;
 
-    for (let attempt = 1; attempt <= 2; attempt++) {
+    for (let attempt = 1; attempt <= 2; attempt += 1) {
       try {
         const result = await model.generateContent(prompt);
-        const text = result.response.text();
+        const parsed = extractJSON(result.response.text());
+        const questions = validateQuizQuestions(parsed, questionCount);
 
-        const questions = extractJSON(text);
-
-        if (questions && Array.isArray(questions)) {
+        if (questions?.length === questionCount) {
           return res.json({ questions });
         }
 
@@ -217,22 +210,20 @@ chatRouter.post('/quiz', async (req, res) => {
           continue;
         }
 
-        return res.status(500).json({ error: 'AI returned an unparseable response. Please try again.' });
+        return res.status(502).json({ error: 'AI returned an invalid quiz format. Please try again.' });
       } catch (err) {
         const statusCode = err.status || err.statusCode;
-        if (statusCode === 429 || statusCode === 503) {
-          if (attempt < 2) {
-            await delay(1000);
-            continue;
-          }
+        if ((statusCode === 429 || statusCode === 503) && attempt < 2) {
+          await delay(1000);
+          continue;
         }
-        if (attempt === 2) {
-          throw err;
-        }
+        throw err;
       }
     }
+
+    return res.status(502).json({ error: 'Gemini did not return quiz questions. Please try again.' });
   } catch (error) {
     console.error('[Quiz Error]', error.message);
-    res.status(500).json({ error: 'Failed to generate quiz. Please try again.' });
+    return res.status(500).json({ error: 'Failed to generate quiz. Please try again.' });
   }
 });

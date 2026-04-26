@@ -37,14 +37,14 @@ describe('Checklist Page', () => {
     expect(screen.getByText('Eligibility')).toBeInTheDocument();
     expect(screen.getByText('Registration')).toBeInTheDocument();
     expect(screen.getByText('Preparation')).toBeInTheDocument();
-    expect(screen.getByText('Voting Plan')).toBeInTheDocument();
+    expect(screen.getByText('Polling Day')).toBeInTheDocument();
   });
 
   it('toggles a checklist item when clicked', async () => {
     const user = userEvent.setup();
     renderWithRouter(<Checklist />);
 
-    const checkbox = screen.getByLabelText(/I confirm I am eligible to vote/i);
+    const checkbox = screen.getByLabelText(/I have confirmed that I am eligible to vote in India/i);
     expect(checkbox).not.toBeChecked();
 
     await user.click(checkbox);
@@ -55,7 +55,7 @@ describe('Checklist Page', () => {
     const user = userEvent.setup();
     renderWithRouter(<Checklist />);
 
-    const checkbox = screen.getByLabelText(/I confirm I am eligible to vote/i);
+    const checkbox = screen.getByLabelText(/I have confirmed that I am eligible to vote in India/i);
     await user.click(checkbox);
 
     // Progress should be > 0%

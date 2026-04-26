@@ -29,10 +29,10 @@ describe('Home Page', () => {
 
   it('renders all feature cards', () => {
     renderWithRouter(<Home />);
-    expect(screen.getByText('Ask AI Assistant')).toBeInTheDocument();
-    expect(screen.getByText('Interactive Timeline')).toBeInTheDocument();
+    expect(screen.getByText('Ask the AI Assistant')).toBeInTheDocument();
+    expect(screen.getByText('Interactive ECI Timeline')).toBeInTheDocument();
     expect(screen.getByText('Test Your Knowledge')).toBeInTheDocument();
-    expect(screen.getByText('Voter Checklist')).toBeInTheDocument();
+    expect(screen.getByText('Firebase-Synced Checklist')).toBeInTheDocument();
   });
 
   it('renders CTA buttons with correct links', () => {
@@ -46,9 +46,9 @@ describe('Home Page', () => {
   it('renders the how-it-works section', () => {
     renderWithRouter(<Home />);
     expect(screen.getByText('How Step2Vote Works')).toBeInTheDocument();
-    expect(screen.getByText('Choose a Topic')).toBeInTheDocument();
-    expect(screen.getByText('Get AI-Powered Answers')).toBeInTheDocument();
-    expect(screen.getByText('Vote with Confidence')).toBeInTheDocument();
+    expect(screen.getByText('Choose a Civic Topic')).toBeInTheDocument();
+    expect(screen.getByText('Get Grounded Answers')).toBeInTheDocument();
+    expect(screen.getByText('Prepare and Save Progress')).toBeInTheDocument();
   });
 
   it('feature cards have unique IDs for testing', () => {

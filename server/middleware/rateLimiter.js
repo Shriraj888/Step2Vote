@@ -7,7 +7,7 @@
  * @module middleware/rateLimiter
  */
 
-import rateLimit from 'express-rate-limit';
+import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 
 /**
  * Rate limiter configured for 30 requests per minute per IP.
@@ -22,8 +22,5 @@ export const rateLimiter = rateLimit({
     error: 'Too many requests. Please wait a moment before trying again.',
     retryAfter: 60,
   },
-  keyGenerator: (req) => {
-    // Use X-Forwarded-For if behind a proxy, otherwise use IP
-    return req.headers['x-forwarded-for'] || req.ip;
-  },
+  keyGenerator: (req) => ipKeyGenerator(req.ip),
 });
