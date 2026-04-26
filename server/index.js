@@ -76,8 +76,8 @@ app.use((err, _req, res, _next) => {
 });
 
 /* ─── Start Server ─────────────────────────────────────────────────── */
-app.listen(PORT, () => {
-  console.log(`✅ Step2Vote API server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ Step2Vote API server running on http://0.0.0.0:${PORT}`);
   if (!process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY === 'your_gemini_api_key_here') {
     console.warn('⚠️  GEMINI_API_KEY is not set. Add it to your .env file.');
   }
