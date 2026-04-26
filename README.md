@@ -10,6 +10,8 @@ An AI-powered, interactive web application that helps users understand the elect
 | **📚 Interactive Timeline** | Step-by-step guide through the complete election process with expandable details |
 | **❓ Knowledge Quiz** | AI-generated quiz questions to test your election knowledge with scoring |
 | **✅ Voter Checklist** | Interactive preparation checklist with progress tracking (persisted locally) |
+| **🔐 Secure Auth** | Integrated Firebase Authentication for user accounts |
+| **👤 Guest Mode** | Optional guest access to explore features without an account |
 
 ## 🏗️ Architecture
 
@@ -36,6 +38,7 @@ An AI-powered, interactive web application that helps users understand the elect
 ### Prerequisites
 - Node.js 18+
 - Google AI Studio API Key ([Get one here](https://aistudio.google.com/apikey))
+- Firebase Project (for Authentication)
 
 ### Installation
 
@@ -43,10 +46,15 @@ An AI-powered, interactive web application that helps users understand the elect
 # Install dependencies
 npm install
 
-# Configure your API key
+# Configure your environment
 cp .env.example .env
-# Edit .env and add your GEMINI_API_KEY
+# Edit .env and add your GEMINI_API_KEY and Firebase config details
 ```
+
+### Firebase Configuration
+1. Create a project in the [Firebase Console](https://console.firebase.google.com/).
+2. Enable **Authentication** and choose your preferred sign-in methods (Email/Password, Google, etc.).
+3. Add a Web App to your project and copy the configuration object to your `.env` file.
 
 ### Development
 
@@ -135,6 +143,7 @@ gcloud app deploy --update-env-vars GEMINI_API_KEY="your_api_key_here"
 |-------|-----------|
 | Frontend | React 19, React Router, Vite |
 | Backend | Express.js |
+| Auth | Firebase Authentication |
 | AI | Google Gemini 2.5 Flash (`@google/generative-ai`) |
 | Testing | Vitest, React Testing Library, jest-axe |
 | Styling | Vanilla CSS with Custom Properties |
@@ -172,7 +181,7 @@ Step2Vote/
 | **Efficiency** | Lazy-loaded routes, memoized components, optimized re-renders |
 | **Testing** | Unit tests (Vitest + RTL), accessibility tests (jest-axe) |
 | **Accessibility** | WCAG 2.1 AA, skip links, ARIA, keyboard nav, reduced-motion |
-| **Google Services** | Gemini 2.5 Flash AI, Google Fonts, safety settings |
+| **Google Services** | Gemini 2.5 Flash AI, Firebase Auth, Google Fonts, safety settings |
 
 ## 📜 License
 
